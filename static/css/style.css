@@ -1,0 +1,177 @@
+@import url("reset.css");
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: #2D2D3A;
+    color: #FFFFFF;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Контейнер ограничивающий ширину контента */
+.container {
+    max-width: 1220px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+/* Хедер */
+.header {
+    background-color: #1C1C24;
+    width: 100%;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.header-logo {
+    font-size: 42px;
+    margin: 0;
+}
+
+.header-logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-menu {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.header-search-container {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+    margin-top: 5px;
+}
+
+.header-search {
+    background-color: #2D2D3A;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    color: white;
+    flex-grow: 1;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.search-button-submit {
+    background-color: #2D2D3A;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 0 20px;
+    height: 40px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.search-button-submit:hover {
+    background-color: #4447E2;
+}
+
+.header-user-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 3px;
+}
+
+.header-user-nickname {
+    margin: 0;
+}
+
+.user-nickname-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-user-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.arrow-userinfo-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.header-arrow-down {
+    width: 16px;
+    height: 16px;
+}
+
+/* Мейн */
+.main {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-text {
+    margin-top: 15px;
+}
+
+.main-text p {
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.main-title {
+    font-size: 30px;
+}
+
+/* Футер */
+.footer {
+    background-color: #1C1C24;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-contact-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-title {
+    color: #C0C0C0;
+}
+
+.contact-list {
+    margin-top: a;
+}
+
+.footer-contact-link {
+    color: #A9A9A9;
+    text-decoration: none;
+}

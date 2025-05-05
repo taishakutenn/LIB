@@ -133,10 +133,6 @@ html, body {
     flex-direction: column;
 }
 
-.main-text {
-    margin-top: 15px;
-}
-
 .main-text p {
     font-size: 20px;
     font-weight: 200;

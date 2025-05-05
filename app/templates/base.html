@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIB</title>
-    <link href="../static/css/style.css" rel="stylesheet">
+    <title>{{ title }}</title>
+    <link href="{{ url_for('static', filename='/css/style.css') }}" rel="stylesheet">
+
+    {% if local_css_file %}
+        <link href="{{ url_for('static', filename='/css/' ~ local_css_file) }}" rel="stylesheet">
+    {% endif %}
 
     <!-- Импорт шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +24,7 @@
                     <p class="header-logo"><a href="#" class="header-logo-link">LIB</a></p>
                 </div>
                 <ul class="header-menu">
-                    <li><a href="#" class="header-logo-link">Главная</a></li>
+                    <li><a href="{{ url_for('index') }}" class="header-logo-link">Главная</a></li>
                     <li><a href="#" class="header-logo-link">Все книги</a></li>
                     <li><a href="#" class="header-logo-link">О проекте</a></li>
                 </ul>
@@ -42,7 +46,7 @@
         <main class="main">
             <div class="container">
                 <div class="main-container">
-                    <h1 class="main-title">Заголовок страницы</h1>
+                    <h1 class="main-title">{{ title }}</h1>
                     {% block content %}{% endblock %}
                 </div>
             </div>

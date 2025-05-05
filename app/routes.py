@@ -5,8 +5,6 @@ from app import app
 
 
 # from flask_login import current_user, login_user, logout_user, login_required
-# import os
-# import asyncio
 # from is_safe_url import is_safe_url
 #
 # from app import app, db
@@ -17,8 +15,15 @@ from app import app
 @app.route("/")
 @app.route("/index")
 def index():
+    """
+    Параметр local_css_file нужен для подключения css файла конкретной страницы
+    Это сделано для того, что бы не пришлось писать один огромный css файл
+    И что бы пользователям не надо было грузить большое кол-во ненужных css свойств для каждой страницы
+    """
 
-    params = {"title": "Главная"}
+    params = {"title": "Главная",
+              "local_css_file": "index.css"}
+
     return render_template("index.html", **params)
 
 

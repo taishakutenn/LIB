@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="register-form" method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.username.label }}
+        {{ form.username(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ form.password.label }}
+        {{ form.password(class="form-control") }}
+    </div>
+
+    <div class="form-group-remember">
+        {{ form.remember_me.label }}
+        {{ form.remember_me(class="form-check-input") }}
+    </div>
+
+    {{ form.submit(class="search-button-submit") }}
+</form>
+{% endblock %}

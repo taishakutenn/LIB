@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="register-form" method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.role.label }}
+                <div class="radio-group">
+                    {% for subfield in form.role %}
+                        <label>{{ subfield() }} {{ subfield.label.text }}</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group" id="admin-code-group" style="display: none;">
+                {{ form.admin_code.label }}
+                {{ form.admin_code(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="form-control") }}
+            </div>
+
+            {{ form.submit(class="search-button-submit") }}
+        </form>
+
+        <!-- Подключаем скрипт -->
+        <script src="{{ url_for('static', filename='scripts/register_admin_code.js') }}"></script>
+{% endblock %}

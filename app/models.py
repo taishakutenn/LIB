@@ -8,8 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db
-
+from app import db, login
 
 # Ассоциативная таблица для связи пользователей и книг (что они читали)
 users_books = sa.Table(
@@ -66,6 +65,11 @@ class User(UserMixin, db.Model):
         Если аватарки нет, Gravatar предоставляет случайный аватар."""
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f"https://www.gravatar.com/avatar/{digest}?s={size}&d=identicon"
+
+    # Классметод для проверки существования пользователя
+    @classmethod
+    def is_exists(cls, username, email=None):
+        return db.session.query(cls).filter((cls.username == username) | (cls.email == email)).first()
 
 
 # Таблица Книг
@@ -156,7 +160,7 @@ class Review(db.Model):
     book = so.relationship("Book", back_populates="reviews")
 
 
-# # Функция для Flask-Login
-# @login.user_loader
-# def load_user(id):
-#     return db.session.get(User, int(id))
+# Функция для Flask-Login
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))

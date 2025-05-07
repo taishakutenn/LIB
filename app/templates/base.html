@@ -14,6 +14,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -33,11 +35,20 @@
                     <button class="search-button-submit">Найти</button>
                 </div>
                 <div class="header-user-container">
-                    <p class="header-user-nickname"><a href="#" class="user-nickname-link">Никнейм пользователя</a></p>
-                    <img class="header-user-img" src="../static/images/avatar.png" alt="Аватар">
-                    <button class="arrow-userinfo-button">
-                        <img class="header-arrow-down" src="../static/images/arrow-ios-down.svg" alt="Стрелка вниз">
-                    </button>
+                    {% if current_user.is_authenticated %}
+                        <p class="header-user-nickname">
+                            <a href="{{ url_for('user_account', username=current_user.username) }}" class="user-nickname-link">{{ current_user.username }}</a>
+                        </p>
+                        <img class="header-user-img" src="{{ current_user.avatar(60) }}" alt="Аватар">
+                        <button class="arrow-userinfo-button">
+                            <img class="header-arrow-down" src="../static/images/arrow-ios-down.svg" alt="Стрелка вниз">
+                        </button>
+                    {% else %}
+                        <p class="header-user-nickname">
+                            <a href="{{ url_for('register') }}" class="user-nickname-link">Зарегистрироваться</a>
+                            <a href="{{ url_for('register') }}" class="user-nickname-link">Войти</a>
+                        </p>
+                    {% endif %}
                 </div>
             </div>
         </header>

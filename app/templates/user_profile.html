@@ -1,4 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
-    Страница пользователя {{ Username }}
+<div class="user-profile-container">
+    <div class="profile-card-container">
+        <img src="{{ user.avatar(100) }}" class="profile-avatar-image">
+        <div class="user-info-container">
+            <p class="profile-username">{{ user.username }}</p>
+            <p class="profile-user-email">{{ user.email }}</p>
+            {% if user.role == "admin"%}
+                <p class="profile-user-role">Администратор</p>
+            {% else %}
+                <p class="profile-user-role">Пользователь</p>
+            {% endif %}
+        </div>
+        <p class="profile-books-container-title">Мои книги</p>
+        <div class="profile-books-container">
+            <div class="book-card">
+                <img src="static/images/book1.jpg" class="profile-book-image">
+                <div class="profile-book-info">
+                    <p>Название книги</p>
+                    <p>Автор книги</p>
+                </div>
+            </div>
+            <div class="book-card">
+                <img src="static/images/book1.jpg" class="profile-book-image">
+                <div class="profile-book-info">
+                    <p>Название книги</p>
+                    <p>Автор книги</p>
+                </div>
+            </div>
+            <div class="book-card">
+                <img src="static/images/book1.jpg" class="profile-book-image">
+                <div class="profile-book-info">
+                    <p>Название книги</p>
+                    <p>Автор книги</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-profile-reviews">
+        <p class="profile-reviews-container-title">Мои отзывы</p>
+        <div class="review-card">
+            <p class="review-title">Самое прекрасное произведение от мира сего</p>
+            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
+        </div>
+        <div class="review-card">
+            <p class="review-title">Самое прекрасное произведение от мира сего</p>
+            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
+        </div>
+        <div class="review-card">
+            <p class="review-title">Самое прекрасное произведение от мира сего</p>
+            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
+        </div>
+        <a href="#" class="see-all-reviews">Смотреть все отзывы</a>
+    </div>
+</div>
 {% endblock %}

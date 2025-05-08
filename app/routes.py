@@ -4,14 +4,10 @@ from flask import render_template, redirect, url_for, flash, request
 from app import app
 
 from flask_login import current_user, login_user, logout_user, login_required
-from is_safe_url import is_safe_url
 
 from app import app, db
 from app.forms import RegisterForm, LoginForm
 from app.models import User
-
-
-# @login_required
 
 
 @app.route("/")
@@ -34,8 +30,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
 
-    next_page = request.args.get("next")
-
     form = LoginForm()
     if form.validate_on_submit():
         # Проверка данных
@@ -49,13 +43,9 @@ def login():
             return redirect(url_for("login"))
 
         login_user(user, remember=form.remember_me.data)
-        next_page_post = request.form.get("next")
-        print(next_page_post)
 
-        if next_page_post and is_safe_url(next_page_post, ['127.0.0.1:5000']):
-            return redirect(next_page_post)
-
-        return redirect(url_for("index"))
+        # Если не авторизованный юзер был перекинут, то после логина его вернёт на туже страницу
+        return redirect(request.args.get("next") or url_for("users", value=current_user.username))
 
     params = {"title": "Авторизация",
               "local_css_file": "authorization.css",
@@ -114,7 +104,48 @@ def user_account(username):
     if not user:
         return "Такого пользователя не существует"
 
-    params = {"title": f"Профиль: {username}",
+    params = {"title": f"Профиль пользователя {username}",
+              "local_css_file": "user_profile.css",
               "user": user}
 
     return render_template("user_profile.html", **params)
+
+
+@app.route("/books")
+def books_list():
+    return "Все книги"
+
+
+@app.route("/books/<int:book_id>")
+def book_detail(book_id):
+    return "Конкретная книга"
+
+
+@app.route("/add_book")
+def add_book():
+    return "Добавить книгу"
+
+
+@app.route("/books/<int:book_id>/reviews")
+def book_reviews_list():
+    return "Список всех отзывов на книгу"
+
+
+@app.route("/users/<string:username>/reviews")
+def user_reviews(username):
+    return "Все отзывы пользователя"
+
+
+@app.route("/users/<string:username>/reviews/<int:review_id>")
+def user_review_detail(username, review_id):
+    return "Отзыв детально"
+
+
+@app.route("/authors")
+def authors_list():
+    return "Список всех авторов"
+
+
+@app.route("/authors/<int:author_id>")
+def author_detail(author_id):
+    return "Все книги автора"

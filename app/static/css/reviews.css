@@ -1,0 +1,73 @@
+.reviews-section-title,
+.review-detail-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reviews-section-title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Списки отзывов */
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Отдельный отзыв */
+.review-card,
+.review-detail-card {
+    background-color: #2D2D3A;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Заголовок отзыва */
+.review-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 8px 0;
+    text-align: center;
+}
+
+.review-title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Текст отзыва */
+.review-text,
+.review-full-text {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Вспомогательные поля */
+.review-author,
+.review-book-title,
+.review-author a {
+    font-size: 14px;
+    font-weight: 300;
+    color: #CCCCCC;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.review-book-title a {
+    text-decoration: none;
+    color: inherit;
+}

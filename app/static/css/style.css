@@ -9,6 +9,31 @@ html, body {
     color: #FFFFFF;
 }
 
+/* Стиль для контейнера уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #f8d7da; /* Цвет фона для ошибки */
+    color: #721c24; /* Цвет текста */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+}
+
+/* Кнопка закрытия */
+.notification .close {
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #721c24;
+}
+
 .wrapper {
     min-height: 100%;
     display: flex;

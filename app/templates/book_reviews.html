@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="book-reviews-page">
+    <h2 class="reviews-section-title">Отзывы о книге "{{ reviews[0].book.title }}"</h2>
+    <div class="reviews-list">
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="review-card">
+                    <p class="review-author"><a href="{{ url_for('user_account', username=review.user.username) }}">Пользователь: {{ review.user.username }}</a></p>
+                    <p class="review-title"><a href="{{ url_for('user_review_detail', username=review.user.username, review_id=review.id) }}">{{ review.title }}</a></p>
+                    <p class="review-text">{{ review.text }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="review-title">У данной книги ещё нет отзывов</p>
+        {% endif %}
+        <!-- Ещё отзывы -->
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="single-review-page">
+    <h2 class="review-detail-title">{{ review.title }}</h2>
+    <p class="review-book-title">Книга: {{ review.book.title }}</p>
+    <p class="review-author">Автор отзыва: {{ review.user.username }}</p>
+    <div class="review-detail-card">
+        <p class="review-full-text">
+            {{ review.text }}
+        </p>
+    </div>
+</div>
+{% endblock %}

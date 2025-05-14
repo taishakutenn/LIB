@@ -119,6 +119,11 @@ class Book(db.Model):
     def get_photo(self):
         return self.bin_preview_photo
 
+    # Классметод для проверки существования книги
+    @classmethod
+    def is_exists(cls, book_id):
+        return db.session.query(cls).filter(cls.id == book_id).first()
+
 
 # Таблица Авторов
 class Author(db.Model):
@@ -159,6 +164,11 @@ class Review(db.Model):
     # Отношения к родительским таблицам
     user = so.relationship("User", back_populates="reviews")
     book = so.relationship("Book", back_populates="reviews")
+
+    # Классметод для проверки существования отзыва
+    @classmethod
+    def is_exists(cls, review_id):
+        return db.session.query(cls).filter(cls.id == review_id).first()
 
 
 # Функция для Flask-Login

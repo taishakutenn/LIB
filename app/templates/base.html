@@ -15,19 +15,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
 
+    <!--    Подключение jquery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <!-- Контейнер для уведомлений -->
+    {% if error_message %}
+        <div id="notification" class="notification" style="display: none;">
+            <span id="notification-text">Здесь будет текст уведомления</span>
+        </div>
+    {% endif %}
     <div class="wrapper">
         <!-- Хеадер -->
         <header class="header">
             <div class="container header-container">
                 <div class="header-logo-container">
-                    <p class="header-logo"><a href="#" class="header-logo-link">LIB</a></p>
+                    <p class="header-logo"><a href="{{ url_for('index') }}" class="header-logo-link">LIB</a></p>
                 </div>
                 <ul class="header-menu">
                     <li><a href="{{ url_for('index') }}" class="header-logo-link">Главная</a></li>
-                    <li><a href="#" class="header-logo-link">Все книги</a></li>
+                    <li><a href="{{ url_for('books_list') }}" class="header-logo-link">Все книги</a></li>
                     <li><a href="#" class="header-logo-link">О проекте</a></li>
                 </ul>
                 <div class="header-search-container">
@@ -41,7 +48,7 @@
                         </p>
                         <img class="header-user-img" src="{{ current_user.avatar(60) }}" alt="Аватар">
                         <button class="arrow-userinfo-button">
-                            <img class="header-arrow-down" src="../static/images/arrow-ios-down.svg" alt="Стрелка вниз">
+                            <img class="header-arrow-down" src="{{ url_for('static', filename='images/arrow-ios-down.svg') }}" alt="Стрелка вниз">
                         </button>
                     {% else %}
                         <p class="header-user-nickname">
@@ -78,5 +85,8 @@
             </div>
         </footer>
     </div>
+
+<!--    &lt;!&ndash;Подключаем скрипт уведомления об ошибке&ndash;&gt;-->
+<!--    <script src="{{ url_for('static', filename='scripts/error_notification.js') }}"></script>-->
 </body>
 </html>

@@ -12,15 +12,23 @@
     justify-content: center;
 }
 
-/* Карточка книги */
+.profile-books-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
 .book-card {
+    flex: 1 1 calc(33.333% - 17px);
+    box-sizing: border-box;
+    max-width: calc(33.333% - 17px);
     background-color: #1C1C24;
     border-radius: 16px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 400px; /* стало шире */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     transition: transform 0.2s;
 }
@@ -41,6 +49,11 @@
     font-size: 20px;
     font-weight: 600;
     margin: 0 0 8px;
+}
+
+.book-card-title a {
+    color: inherit;
+
 }
 
 .book-card-author {
@@ -76,12 +89,27 @@
     transition: background-color 0.2s;
 }
 
+.book-card-button-change {
+    background-color: #F14065;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
 .book-card-button:hover {
     background-color: #5B5EFF;
 }
 
+.book-card-button-change:hover {
+    background-color: #F56A88;
+}
+
 /* Детальная страница книги */
 .book-detail-section {
+    margin-top: 20px;
     background-color: #1C1C24;
     border-radius: 20px;
     padding: 30px;
@@ -193,4 +221,80 @@
 .book-card.full .book-card-description {
     max-height: none;
     overflow: visible;
+}
+
+.book-detail-section-for-add {
+    margin-top: 20px;
+    max-width: 700px;
+    background-color: #1C1C24;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.add-book-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.form-input {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #2D2D3A;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-input:focus {
+    background-color: #3A3A4A;
+}
+
+.form-error {
+    color: #FF5C5C;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.tag-option {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 6px 4px;
+    border-radius: 20px;
+    background-color: #1e3a8a; /* тёмно-синий */
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border: none;
+    user-select: none;
+}
+
+.tag-option:hover {
+    background-color: #2c5282; /* немного светлее при наведении */
+    transform: scale(1.05);
+}
+
+.tag-option.selected {
+    background-color: #0f172a; /* ещё темнее, когда выбрано */
+    color: #e0e7ff;
+    font-weight: bold;
 }

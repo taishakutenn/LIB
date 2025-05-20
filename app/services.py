@@ -1,5 +1,8 @@
+from dns.e164 import query
+
 from app import db
-from app.models import User, Tag, Review, Author, Book
+from app.models import User, Tag, Review, Author, Book, books_tags
+import sqlalchemy as sa
 
 
 # Функции для отзывов
@@ -38,3 +41,51 @@ def get_review_detail(username, review_id):
         raise ValueError("Отзыва с таким id не существует")
 
     return is_review_exist
+
+
+def get_all_tags():
+    """Возвращаем все теги на сервере"""
+
+    return db.session.query(Tag).all()
+
+
+def add_tag_for_book(book_id, tags):
+    """Добавляет связи книга-тег в таблицу books_tags"""
+
+    # Проверка на наличие тегов
+    if not tags:
+        return None
+
+    # Проверка существования книги
+    book = Book.is_exists(book_id)
+    if not book:
+        return None
+
+    for tag_name in tags:
+        tag = Tag.is_exists(tag_name)
+        if not tag:
+            continue  # Если тег не найден, пропускаем
+
+        # Проверяем, нет ли уже такой связи
+        stmt = sa.select(books_tags).where(
+            books_tags.c.book_id == book_id,
+            books_tags.c.tag_id == tag.id
+        )
+        exists = db.session.execute(stmt).first()
+
+        if not exists:
+            insert_stmt = books_tags.insert().values(book_id=book_id, tag_id=tag.id)
+            db.session.execute(insert_stmt)
+
+    db.session.commit()
+    return True
+
+
+def get_all_books():
+    """Функция возвращающая все книги"""
+    return db.session.query(Book).all()
+
+
+def get_last_books():
+    """Функция, возвращающая последние 9 добавленных книг на сайт"""
+    return db.session.query(Book).limit(9)

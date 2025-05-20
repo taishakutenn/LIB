@@ -7,9 +7,10 @@ from app import app, services
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
-from app.forms import RegisterForm, LoginForm
-from app.models import User
-from app.services import get_reviews_for_book, get_user_reviews, get_review_detail
+from app.forms import RegisterForm, LoginForm, AddBookForm
+from app.models import User, Book
+from app.services import get_reviews_for_book, get_user_reviews, get_review_detail, get_all_tags, add_tag_for_book, \
+    get_all_books, get_last_books
 
 
 @app.route("/")
@@ -22,6 +23,7 @@ def index():
     """
 
     params = {"title": "Главная",
+              "books": get_last_books(),
               "local_css_file": "index.css"}
 
     return render_template("index.html", **params)
@@ -116,6 +118,7 @@ def user_account(username):
 @app.route("/books")
 def books_list():
     params = {"title": "Лента",
+              "books": get_all_books(),
               "local_css_file": "book.css"}
 
     return render_template("books_ribbon.html", **params)
@@ -123,15 +126,60 @@ def books_list():
 
 @app.route("/books/<int:book_id>")
 def book_detail(book_id):
-    params = {"title": "Мор, ученик смерти",
-              "local_css_file": "book.css"}
+    params = {"local_css_file": "book.css"}
+
+    book = Book.is_exists(book_id)
+    if not book:
+        return "Такой книги не сущесвутет", 404
+
+    # Добавляем книгу в шаблон, если она существует
+    params["book"] = book
+    params["title"] = book.title
 
     return render_template("book_detail.html", **params)
 
 
-@app.route("/add_book")
+# Добавление книги
+@app.route("/books/add_book", methods=["GET", "POST"])
 def add_book():
-    return "Добавить книгу"
+    # Форма добавления книги
+    form = AddBookForm()
+    # Задаём возможные теги
+    available_tags = [tag.name for tag in get_all_tags()]
+    form.tags.choices = [(tag, tag) for tag in available_tags]
+
+    params = {"title": "Добавить книгу",
+              "local_css_file": "book.css",
+              "form": form,
+              "available_tags": available_tags}
+
+    if form.validate_on_submit():
+        # Начинаем создавать книгу
+        book = Book(title=form.title.data,
+                    description=form.description.data)
+
+        # Если указана ссылка на скачивание
+        if form.link_to_download.data:
+            book.link_to_download = form.link_to_download.data
+
+        # Если добавлено фото
+        if form.book_photo.data:
+            book.set_photo(form.book_photo.data)
+
+        # Получаем выбранные теги
+        selected_tags = request.form.get("selected_tags", "").split(",")
+
+        # Добавляем книгу в бд
+        db.session.add(book)
+        db.session.commit()
+
+        # Добавляем выбранные теги в таблицу
+        add_tag_for_book(book.id, selected_tags)
+
+        # Перенаправляем на страницу с книгой
+        return redirect(url_for("book_detail", book_id=book.id))
+
+    return render_template("create_book.html", **params)
 
 
 # Все отзывы на конкретную книгу

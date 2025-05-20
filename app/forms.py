@@ -1,8 +1,10 @@
 """Файл для Форм"""
-
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import StringField, PasswordField, SubmitField, EmailField, RadioField, BooleanField
+from wtforms.fields.choices import SelectMultipleField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.widgets.core import ListWidget, CheckboxInput
 
 
 class RegisterForm(FlaskForm):
@@ -26,3 +28,16 @@ class LoginForm(FlaskForm):
     password = PasswordField("Пароль", validators=[DataRequired()])
     remember_me = BooleanField("Запомнить меня")
     submit = SubmitField("Войти")
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = ListWidget(prefix_label=False)
+    option_widget = CheckboxInput()
+
+
+class AddBookForm(FlaskForm):
+    title = StringField("Название книги", validators=[DataRequired(), Length(3, 98)])
+    description = StringField("Описание книги", validators=[DataRequired(), Length(min=10)])
+    link_to_download = StringField("Ссылка на скачивание")
+    book_photo = FileField("Обложка книги")
+    tags = MultiCheckboxField("Теги", choices=[])  # choices зададим в маршруте

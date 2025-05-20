@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+
 {% block content %}
 <div class="main-text">
     <p>
-        LIB - онлайн библиотека с огромной коллекцией книг!<br>
-        Книги на любой вкус, от сказок Александра Пушкина и до хорроров Стивена Кинга!<br>
+        LIB — онлайн библиотека с огромной коллекцией книг!<br>
+        Книги на любой вкус: от сказок Александра Пушкина до хорроров Стивена Кинга!<br>
         Читайте только у нас!
     </p>
 </div>
@@ -12,47 +13,31 @@
 
 <!-- Слайдер -->
 <div class="books-slider-container">
-    <img class="slider-wave" src="static/images/left_wave.png">
-    
-    <div class="slider-card">
-        <img class="slider-card-image" src="static/images/book1.jpg" alt="Обложка книги">
-        <h3 class="card-title-book">Мор, ученик смерти</h3>
-        <div class="slider-card-info-row">
-            <p class="book-author">Терри Пратчетт</p>
-            <div class="slider-view-container">
-                <p>100</p>
-                <img class="slider-eye-image" src="static/images/eye.svg" alt="Кол-во показов">
+    <!-- Левая волна -->
+    <img class="slider-wave left" src="{{ url_for('static', filename='images/left_wave.png') }}" alt="Назад">
+
+    <!-- Трек с карточками книг -->
+    <div class="slider-track">
+        {% for book in books %}
+        <div class="slider-card">
+            <img class="slider-card-image" src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" alt="Обложка книги">
+            <h3 class="card-title-book">{{ book.title }}</h3>
+            <div class="slider-card-info-row">
+                <p class="book-author">Автор</p>
+                <div class="slider-view-container">
+                    <p>100</p>
+                    <img class="slider-eye-image" src="{{ url_for('static', filename='images/eye.svg') }}" alt="Кол-во показов">
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="slider-card">
-        <img class="slider-card-image" src="static/images/book2.jpg" alt="Обложка книги">
-        <h3 class="card-title-book">Кристина</h3>
-        <div class="slider-card-info-row">
-            <p class="book-author">Стивен Кинг</p>
-            <div class="slider-view-container">
-                <p>450</p>
-                <img class="slider-eye-image" src="static/images/eye.svg" alt="Кол-во показов">
-            </div>
-        </div>
-    </div>
-    
-    <div class="slider-card">
-        <img class="slider-card-image" src="static/images/book3.jpg" alt="Обложка книги">
-        <h3 class="card-title-book">Сборник лекций по высшей математике</h3>
-        <div class="slider-card-info-row">
-            <p class="book-author">Д.Т. Письменный</p>
-            <div class="slider-view-container">
-                <p>100</p>
-                <img class="slider-eye-image" src="static/images/eye.svg" alt="Кол-во показов">
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
-    <img class="slider-wave" src="static/images/right_wave.png">
+    <!-- Правая волна -->
+    <img class="slider-wave right" src="{{ url_for('static', filename='images/right_wave.png') }}" alt="Вперёд">
 </div>
 
-<!-- Кнопка для добавления новой книги -->
-<button class="add-new-book-button" href="#">Добавить книгу</button>
+<!-- Кнопка добавления книги -->
+<a class="add-new-book-button" href="{{ url_for('add_book') }}">Добавить книгу</a>
+<script src="{{ url_for('static', filename='scripts/slider-waves.js') }}"></script>
 {% endblock %}

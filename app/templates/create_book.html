@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="book-detail-section-for-add">
+    <form method="POST" enctype="multipart/form-data" class="add-book-form">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-input") }}
+            {% for error in form.title.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-input") }}
+            {% for error in form.description.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.link_to_download.label(class="form-label") }}
+            {{ form.link_to_download(class="form-input") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.book_photo.label(class="form-label") }}
+            {{ form.book_photo(class="form-input") }}
+        </div>
+
+       <div class="form-group">
+            <label class="form-label">Выберите теги:</label>
+            <div id="available-tags">
+                {% for tag in available_tags %}
+                    <span class="tag-option" data-tag="{{ tag }}">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Выбранные теги:</label>
+            <div id="selected-tags"></div>
+            <input type="hidden" name="selected_tags" id="selected-tags-input">
+        </div>
+
+        <button type="submit" class="book-card-button">Добавить книгу</button>
+    </form>
+    <script src="{{ url_for('static', filename='scripts/add_tag_field.js' ) }}"></script>
+</div>
+{% endblock %}

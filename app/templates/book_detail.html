@@ -4,17 +4,14 @@
     <div class="book-card full">
         <img src="static/images/book1.jpg" alt="Обложка книги" class="book-card-image">
         <div class="book-card-info">
-            <h2 class="book-card-title">Название книги</h2>
+            <h2 class="book-card-title">{{ book.name }}</h2>
             <p class="book-card-author">Автор: Имя Фамилия</p>
-            <p class="book-detail-meta">Жанр: Фантастика | Год: 2022 | Страниц: 340</p>
+            <p class="book-detail-meta">Жанры: {% for tag in book.tags %} {{ tag.name }} | {% endfor %}</p>
             <p class="book-card-description">
-                Это подробное описание книги. Здесь можно рассказать о сюжете, героях, атмосфере,
-                о чём книга, кому она будет интересна и какие у неё особенности. Много текста,
-                чтобы пользователь понял, стоит ли её читать.
+                {{ book.description }}
             </p>
             <div class="book-card-buttons">
-                <a href="#" class="book-card-button">Читать онлайн</a>
-                <a href="#" class="book-card-button">Скачать PDF</a>
+                <a href="#" class="book-card-button">Скачать</a>
                 <a href="#" class="book-card-button">В избранное</a>
             </div>
         </div>

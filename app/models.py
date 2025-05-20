@@ -1,5 +1,5 @@
 """Это файл, в котором описаны модели базы данных"""
-
+import base64
 import io
 from PIL import Image
 
@@ -116,8 +116,10 @@ class Book(db.Model):
         except Exception as e:
             raise ValueError(f"Произошла ошибка: {str(e)}")
 
-    def get_photo(self):
-        return self.bin_preview_photo
+    def get_photo_base64(self):
+        if self.bin_preview_photo:
+            return base64.b64encode(self.bin_preview_photo).decode('utf-8')
+        return None
 
     # Классметод для проверки существования книги
     @classmethod
@@ -147,6 +149,11 @@ class Tag(db.Model):
 
     # Отношения многие ко многим
     books = so.relationship("Book", secondary=books_tags, back_populates="tags")
+
+    # Классметод для проверки существования тега
+    @classmethod
+    def is_exists(cls, tag_name):
+        return db.session.query(cls).filter(cls.name == tag_name).first()
 
 
 # Таблица Отзывов

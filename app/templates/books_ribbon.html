@@ -1,45 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="all-books-container">
-            <h2 class="section-title">Все книги</h2>
             <div class="profile-books-container" style="display: flex; flex-wrap: wrap; gap: 20px;">
-                <div class="book-card">
-                    <img src="static/images/book1.jpg" class="book-card-image" alt="Обложка книги">
-                    <h3 class="book-card-title">Название книги</h3>
-                    <p class="book-card-author">Автор книги</p>
-                    <p class="book-card-description">
-                        Здесь будет краткое описание книги. Несколько строк текста, чтобы пользователь понимал, о чём она.
-                    </p>
-                    <div class="book-card-buttons">
-                        <a href="#" class="book-card-button">Читать</a>
-                        <a href="#" class="book-card-button">В избранное</a>
+                {% for book in books %}
+                    <div class="book-card">
+                        <img src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" class="book-card-image" alt="Обложка книги">
+                        <h3 class="book-card-title"><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+                        <p class="book-card-author">Автор книги</p>
+                        <p class="book-card-description">
+                            {{ book.description }}
+                        </p>
+                        <div class="book-card-buttons">
+                            <a href="#" class="book-card-button">Скачать</a>
+                            <a href="#" class="book-card-button">В избранное</a>
+                            {% if current_user.is_authenticated %}
+                                {% if current_user.role == "admin" %}
+                                    <a href="#" class="book-card-button-change">Изменить</a>
+                                {% endif%}
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div class="book-card">
-                    <img src="static/images/book1.jpg" class="book-card-image" alt="Обложка книги">
-                    <h3 class="book-card-title">Название книги</h3>
-                    <p class="book-card-author">Автор книги</p>
-                    <p class="book-card-description">
-                        Здесь будет краткое описание книги. Несколько строк текста, чтобы пользователь понимал, о чём она.
-                    </p>
-                    <div class="book-card-buttons">
-                        <a href="#" class="book-card-button">Читать</a>
-                        <a href="#" class="book-card-button">В избранное</a>
-                    </div>
-                </div>
-                <div class="book-card">
-                    <img src="static/images/book1.jpg" class="book-card-image" alt="Обложка книги">
-                    <h3 class="book-card-title">Название книги</h3>
-                    <p class="book-card-author">Автор книги</p>
-                    <p class="book-card-description">
-                        Здесь будет краткое описание книги. Несколько строк текста, чтобы пользователь понимал, о чём она.
-                    </p>
-                    <div class="book-card-buttons">
-                        <a href="#" class="book-card-button">Читать</a>
-                        <a href="#" class="book-card-button">В избранное</a>
-                    </div>
-                </div>
-            <!-- Добавь больше карточек по необходимости -->
+                {% endfor %}
         </div>
     </div>
 {% endblock %}

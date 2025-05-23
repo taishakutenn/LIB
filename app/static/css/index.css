@@ -91,6 +91,10 @@
     margin-top: 10px;
 }
 
+.card-title-book a {
+    color: inherit;
+}
+
 .slider-card-info-row {
     display: flex;
     justify-content: space-between;
@@ -138,4 +142,110 @@
 .add-new-book-button:hover {
     background-color: #5C5FFF;
     transform: translateY(-2px);
+}
+
+/* Общий стиль для формы */
+.add-book-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #1e1f2b;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Отдельный блок формы */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Лейблы */
+.form-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #e0e0e0;
+}
+
+/* Инпуты */
+.form-input {
+    padding: 10px 14px;
+    border: 1px solid #444;
+    border-radius: 10px;
+    background-color: #2c2d3c;
+    color: #ffffff;
+    font-size: 15px;
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #6a6dfc;
+    background-color: #31324b;
+}
+
+/* Кнопка под формой */
+.book-card-button {
+    background-color: #4447E2;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.book-card-button:hover {
+    background-color: #5C5FFF;
+    transform: translateY(-2px);
+}
+
+/* Ошибки валидации */
+.form-error {
+    font-size: 13px;
+    color: #ff6b6b;
+    margin-top: 6px;
+}
+
+/* Контейнеры авторов */
+#authors-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.author-field {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Теги */
+.tag-option {
+    display: inline-block;
+    background-color: #2e2f44;
+    color: #ffffff;
+    padding: 6px 12px;
+    margin: 6px 6px 0 0;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tag-option:hover {
+    background-color: #3c3e5c;
+}
+
+#selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }

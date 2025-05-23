@@ -59,14 +59,15 @@
         <div class="form-group">
             <label class="form-label">Выбранные теги:</label>
             <div id="selected-tags"></div>
-            <input type="hidden" name="selected_tags" id="selected-tags-input">
+            <input type="hidden" name="selected_tags" id="selected-tags-input" value="{{ ','.join(selected_tags) }}">
         </div>
 
-        <button type="submit" class="book-card-button">Добавить книгу</button>
+        <input type="hidden" id="selected-authors-data" value="{{ '|'.join(selected_authors) }}">
+        <button type="submit" class="book-card-button">Изменить книгу</button>
     </form>
 
 <!--    Подключаем js-->
-    <script src="{{ url_for('static', filename='scripts/add_tag_field.js' ) }}"></script>
-    <script src="{{ url_for('static', filename='scripts/add_author_field.js' ) }}"></script>
+    <script src="{{ url_for('static', filename='scripts/add_tag_field_for_change.js' ) }}"></script>
+    <script src="{{ url_for('static', filename='scripts/add_author_filed_for_change.js' ) }}"></script>
 </div>
 {% endblock %}

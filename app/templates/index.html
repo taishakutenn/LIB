@@ -21,9 +21,9 @@
         {% for book in books %}
         <div class="slider-card">
             <img class="slider-card-image" src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" alt="Обложка книги">
-            <h3 class="card-title-book">{{ book.title }}</h3>
+            <h3 class="card-title-book"><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
             <div class="slider-card-info-row">
-                <p class="book-author">Автор</p>
+                <p class="book-author">Авторы {% for author in book.authors %} {{ author.name }} {{ author.surname}} |{% endfor %}</p>
                 <div class="slider-view-container">
                     <p>100</p>
                     <img class="slider-eye-image" src="{{ url_for('static', filename='images/eye.svg') }}" alt="Кол-во показов">

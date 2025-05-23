@@ -4,6 +4,7 @@ import io
 from PIL import Image
 
 from flask_login import UserMixin
+from sqlalchemy import and_
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 import sqlalchemy as sa
@@ -138,6 +139,17 @@ class Author(db.Model):
 
     # Отношения многие ко многим
     books = so.relationship("Book", secondary=authors_books, back_populates="authors")
+
+    # Класс метод для проверки существования автора
+    @classmethod
+    def is_exists(cls, author_name, author_surname, author_patronymic):
+        return db.session.query(cls).filter(
+            and_(
+                cls.name == author_name,
+                cls.surname == author_surname,
+                cls.patronymic == author_patronymic
+            )
+        ).first()
 
 
 # Таблица Тегов

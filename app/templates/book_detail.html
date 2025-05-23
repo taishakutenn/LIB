@@ -2,10 +2,10 @@
 {% block content %}
 <div class="book-detail-section">
     <div class="book-card full">
-        <img src="static/images/book1.jpg" alt="Обложка книги" class="book-card-image">
+        <img src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" alt="Обложка книги" class="book-card-image">
         <div class="book-card-info">
             <h2 class="book-card-title">{{ book.name }}</h2>
-            <p class="book-card-author">Автор: Имя Фамилия</p>
+            <p class="book-card-author">Авторы: {% for author in book.authors %} {{ author.name }} {{ author.surname}} {{ author.patronymic }} |{% endfor %}</p>
             <p class="book-detail-meta">Жанры: {% for tag in book.tags %} {{ tag.name }} | {% endfor %}</p>
             <p class="book-card-description">
                 {{ book.description }}

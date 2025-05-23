@@ -10,7 +10,7 @@ from app import app, db
 from app.forms import RegisterForm, LoginForm, AddBookForm
 from app.models import User, Book
 from app.services import get_reviews_for_book, get_user_reviews, get_review_detail, get_all_tags, add_tag_for_book, \
-    get_all_books, get_last_books
+    get_all_books, get_last_books, add_authors_for_book
 
 
 @app.route("/")
@@ -158,6 +158,10 @@ def add_book():
         book = Book(title=form.title.data,
                     description=form.description.data)
 
+        # Если не указан ни один автор
+        if not form.authors.data:
+            return "Укажите хотя-бы одного автора", 404
+
         # Если указана ссылка на скачивание
         if form.link_to_download.data:
             book.link_to_download = form.link_to_download.data
@@ -169,17 +173,108 @@ def add_book():
         # Получаем выбранные теги
         selected_tags = request.form.get("selected_tags", "").split(",")
 
+        # Получаем авторов
+        authors = form.authors.data
+
         # Добавляем книгу в бд
         db.session.add(book)
         db.session.commit()
 
-        # Добавляем выбранные теги в таблицу
+        # Добавляем выбранные теги и авторовов в таблицы
         add_tag_for_book(book.id, selected_tags)
+        result_add_authors = add_authors_for_book(book.id, authors)
+
+        if not result_add_authors:
+            return "Не удалось создать авторов", 404
 
         # Перенаправляем на страницу с книгой
         return redirect(url_for("book_detail", book_id=book.id))
 
     return render_template("create_book.html", **params)
+
+
+# Изменение книги
+@app.route("/books/change_book/<int:book_id>", methods=["GET", "POST"])
+def change_book(book_id):
+    # Проверяем, существует ли такая книга
+    book = Book.is_exists(book_id)
+    if not book:
+        return "Такой книги не существует"
+
+    form = AddBookForm(obj=book)
+
+    available_tags = [tag.name for tag in get_all_tags()]
+    form.tags.choices = [(tag, tag) for tag in available_tags]
+    selected_tags = [tag.name for tag in book.tags]
+    selected_authors = [" ".join([author.surname, author.name, author.patronymic]) for author in book.authors]
+
+    params = {
+        "title": "Изменить книгу",
+        "local_css_file": "book.css",
+        "form": form,
+        "available_tags": available_tags,
+        "selected_tags": selected_tags,
+        "selected_authors": selected_authors
+    }
+
+    if form.validate_on_submit():
+        change_flag = False
+
+        # Название
+        if book.title != form.title.data:
+            book.title = form.title.data
+            change_flag = True
+
+        # Описание
+        if book.description != form.description.data:
+            book.description = form.description.data
+            change_flag = True
+
+        # Ссылка
+        if form.link_to_download.data and book.link_to_download != form.link_to_download.data:
+            book.link_to_download = form.link_to_download.data
+            change_flag = True
+
+        # Фото
+        if form.book_photo.data:
+            book.set_photo(form.book_photo.data)
+            change_flag = True
+
+        # Теги
+        new_selected_tags = request.form.get("selected_tags", "").split(",")
+        current_tags = [tag.name for tag in book.tags]
+        if sorted(new_selected_tags) != sorted(current_tags):
+            book.tags = []  # очистим текущие связи
+            db.session.commit()
+            add_tag_for_book(book.id, new_selected_tags)
+            change_flag = True
+
+        # Авторы
+        authors = form.authors.data
+        old_authors = [{"surname": a.surname, "name": a.name, "patronymic": a.patronymic} for a in book.authors]
+
+        new_authors_data = []
+        for author in authors:
+            fio = author["name"].strip().split()
+            if len(fio) == 3:
+                new_authors_data.append({"surname": fio[0], "name": fio[1], "patronymic": fio[2]})
+
+        if old_authors != new_authors_data:
+            # Удаляем старых и добавляем новых
+            book.authors = []
+            db.session.commit()
+            result_add_authors = add_authors_for_book(book.id, authors)
+            if not result_add_authors:
+                return "Не удалось обновить авторов", 404
+            change_flag = True
+
+        # Если были изменения, сохраняем
+        if change_flag:
+            db.session.commit()
+
+        return redirect(url_for("book_detail", book_id=book.id))
+
+    return render_template("change_book.html", **params)
 
 
 # Все отзывы на конкретную книгу

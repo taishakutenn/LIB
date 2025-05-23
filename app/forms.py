@@ -3,6 +3,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, PasswordField, SubmitField, EmailField, RadioField, BooleanField
 from wtforms.fields.choices import SelectMultipleField
+from wtforms.fields.form import FormField
+from wtforms.fields.list import FieldList
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from wtforms.widgets.core import ListWidget, CheckboxInput
 
@@ -35,9 +37,17 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = CheckboxInput()
 
 
+class AuthorForm(FlaskForm):
+    """Доп. форма для создания динамечкого поля в форме для авторов"""
+    class Meta:
+        csrf = False  # отключаем CSRF для вложенной формы
+    name = StringField("Введите ФИО автора (через пробел)")
+
+
 class AddBookForm(FlaskForm):
     title = StringField("Название книги", validators=[DataRequired(), Length(3, 98)])
     description = StringField("Описание книги", validators=[DataRequired(), Length(min=10)])
     link_to_download = StringField("Ссылка на скачивание")
     book_photo = FileField("Обложка книги")
+    authors = FieldList(FormField(AuthorForm), min_entries=1) # Минимум 1 поле для автора
     tags = MultiCheckboxField("Теги", choices=[])  # choices зададим в маршруте

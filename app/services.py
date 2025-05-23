@@ -1,7 +1,7 @@
 from dns.e164 import query
 
 from app import db
-from app.models import User, Tag, Review, Author, Book, books_tags
+from app.models import User, Tag, Review, Author, Book, books_tags, authors_books
 import sqlalchemy as sa
 
 
@@ -89,3 +89,47 @@ def get_all_books():
 def get_last_books():
     """Функция, возвращающая последние 9 добавленных книг на сайт"""
     return db.session.query(Book).limit(9)
+
+
+def add_authors_for_book(book_id, authors):
+    """Добавляет связи книга-автор в таблицу books_authora"""
+
+    # Проверка на наличие авторов
+    if not authors:
+        return None
+
+    # Проверка существования книги
+    book = Book.is_exists(book_id)
+    if not book:
+        return None
+
+    for author_dict in authors:
+        # Преобразуем полученную строку в нужный для проверки автора вид
+        author_row = author_dict["name"].split() # Сплитим по пробелу
+        author_surname = author_row[0]
+        author_name = author_row[1]
+        if len(author_row) > 2:
+            author_patronymic = author_row[2]
+        else:
+            author_patronymic = None
+
+        author = Author.is_exists(author_name, author_surname, author_patronymic) # Проверяем существования автора
+        if not author:
+            # Если автор не найден - добавляем его в бд
+            author = Author(name=author_name, surname=author_surname, patronymic=author_patronymic)
+            db.session.add(author)
+            db.session.commit()
+
+        # Проверяем, нет ли уже такой связи
+        stmt = sa.select(authors_books).where(
+            authors_books.c.book_id == book_id,
+            authors_books.c.author_id == author.id
+        )
+        exists = db.session.execute(stmt).first()
+
+        if not exists:
+            insert_stmt = authors_books.insert().values(book_id=book_id, author_id=author.id)
+            db.session.execute(insert_stmt)
+
+    db.session.commit()
+    return True

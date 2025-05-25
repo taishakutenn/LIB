@@ -38,6 +38,11 @@
 </div>
 
 <!-- Кнопка добавления книги -->
-<a class="add-new-book-button" href="{{ url_for('add_book') }}">Добавить книгу</a>
+{% if current_user.is_authenticated %}
+    {% if current_user.role == "admin" %}
+        <a class="add-new-book-button" href="{{ url_for('add_book') }}">Добавить книгу</a>
+    {% endif %}
+{% endif %}
+
 <script src="{{ url_for('static', filename='scripts/slider-waves.js') }}"></script>
 {% endblock %}

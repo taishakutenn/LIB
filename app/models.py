@@ -151,6 +151,11 @@ class Author(db.Model):
             )
         ).first()
 
+    # Класс метод для проверки существования автора по id
+    @classmethod
+    def is_exists_id(cls, author_id):
+        return db.session.query(cls).filter(cls.id == author_id).first()
+
 
 # Таблица Тегов
 class Tag(db.Model):

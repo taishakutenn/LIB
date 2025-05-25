@@ -35,11 +35,13 @@
                 <ul class="header-menu">
                     <li><a href="{{ url_for('index') }}" class="header-logo-link">Главная</a></li>
                     <li><a href="{{ url_for('books_list') }}" class="header-logo-link">Все книги</a></li>
-                    <li><a href="#" class="header-logo-link">О проекте</a></li>
+                    <li><a href="{{ url_for('authors_list') }}" class="header-logo-link">Авторы</a></li>
+                    <li><a href="{{ url_for('about_project') }}" class="header-logo-link">О проекте</a></li>
                 </ul>
                 <div class="header-search-container">
-                    <input type="search" class="header-search" placeholder="Введите название или автора книги">
-                    <button class="search-button-submit">Найти</button>
+                        <input type="search" class="header-search" placeholder="Введите название или автора книги" id="ajax-search" name="search" autocomplete="off">
+                        <div id="suggestions-box" class="suggestions-box"></div>
+                        <button class="search-button-submit" id="search-button">Найти</button>
                 </div>
                 <div class="header-user-container">
                     {% if current_user.is_authenticated %}
@@ -50,10 +52,17 @@
                         <button class="arrow-userinfo-button">
                             <img class="header-arrow-down" src="{{ url_for('static', filename='images/arrow-ios-down.svg') }}" alt="Стрелка вниз">
                         </button>
+
+                        <!-- Выпадающий список -->
+                        <ul class="user-dropdown-menu" style="display: none;">
+                            <li><a href="{{ url_for('user_account', username=current_user.username) }}">Мой профиль</a></li>
+                            <li><a href="">Мои книги</a></li>
+                            <li><a href="{{ url_for('user_reviews', username=current_user.username) }}">Мои отзывы</a></li>
+                        </ul>
                     {% else %}
                         <p class="header-user-nickname">
                             <a href="{{ url_for('register') }}" class="user-nickname-link">Зарегистрироваться</a>
-                            <a href="{{ url_for('register') }}" class="user-nickname-link">Войти</a>
+                            <a href="{{ url_for('login') }}" class="user-nickname-link">Войти</a>
                         </p>
                     {% endif %}
                 </div>
@@ -85,6 +94,15 @@
             </div>
         </footer>
     </div>
+
+<!--        Подлюкчаем ajax крипт для поисковика-->
+    <script src="{{ url_for('static', filename='scripts/ajax_search.js') }}"></script>
+
+<!--    Подключаем скрипт для поиска-->
+    <script src="{{ url_for('static', filename='scripts/search.js') }}"></script>
+
+<!--    Подключаем срипт для выпадающей стрелки-->
+    <script src="{{ url_for('static', filename='scripts/arrow_down.js') }}"></script>
 
 <!--    &lt;!&ndash;Подключаем скрипт уведомления об ошибке&ndash;&gt;-->
 <!--    <script src="{{ url_for('static', filename='scripts/error_notification.js') }}"></script>-->

@@ -86,6 +86,58 @@ html, body {
     gap: 10px;
     flex-grow: 1;
     margin-top: 5px;
+    position: relative;
+}
+
+/* Контейнер подсказок */
+#suggestions-box {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #1C1C24; /* Основной фон как в хедере */
+    /* border: 1px solid #4447E2; /* Акцентный цвет границы */
+    border-radius: 10px; /* Скругление углов как у инпута */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для объема */
+    z-index: 1000;
+    margin-top: 6%; /* Отступ от инпута */
+}
+
+/* Каждая подсказка */
+.suggestion-item {
+    padding: 10px 15px; /* Отступы внутри подсказки */
+    cursor: pointer;
+    font-size: 14px;
+    color: #FFFFFF; /* Белый текст */
+    border-bottom: 1px solid #4447E2; /* Разделитель между подсказками */
+    transition: background-color 0.2s ease; /* Плавное изменение фона */
+}
+
+/* Убираем последний разделитель */
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* Эффект при наведении */
+.suggestion-item:hover {
+    background-color: #4447E2; /* Акцентный цвет фона */
+    color: #FFFFFF; /* Белый текст */
+}
+
+/* Сообщение "Ничего не найдено" */
+.suggestion-item.no-results {
+    text-align: center;
+    color: #A9A9A9; /* Серый текст */
+    font-style: italic;
+    cursor: default;
+}
+
+/* Сообщение об ошибке */
+.suggestion-item.error {
+    text-align: center;
+    color: #FF6B6B; /* Красный текст */
+    font-weight: bold;
+    cursor: default;
 }
 
 .header-search {
@@ -115,6 +167,7 @@ html, body {
 }
 
 .header-user-container {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -195,4 +248,49 @@ html, body {
 .footer-contact-link {
     color: #A9A9A9;
     text-decoration: none;
+}
+
+/* Контейнер выпадающего списка */
+.user-dropdown-menu {
+    position: absolute;
+    top: 100%; /* Размещаем под кнопкой */
+    right: 0; /* Выравниваем по правому краю */
+    background-color: #2D2D3A; /* Темный фон */
+    border-radius: 8px; /* Скругление углов */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Тень для объема */
+    list-style: none; /* Убираем маркеры списка */
+    padding: 10px 0; /* Отступы внутри контейнера */
+    margin: 0;
+    z-index: 1000; /* Чтобы выпадающий список был поверх других элементов */
+    min-width: 150px; /* Минимальная ширина */
+    display: none; /* По умолчанию скрыт */
+}
+
+/* Элементы выпадающего списка */
+.user-dropdown-menu li {
+    padding: 10px 15px; /* Отступы внутри элемента */
+    cursor: pointer; /* Изменение курсора при наведении */
+    font-size: 14px; /* Размер текста */
+    color: #CCCCCC; /* Серый текст */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавные переходы */
+    border-bottom: 1px solid #4447E2; /* Разделитель между элементами */
+}
+
+/* Убираем последний разделитель */
+.user-dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+/* Эффект при наведении */
+.user-dropdown-menu li:hover {
+    background-color: #4447E2; /* Акцентный цвет фона */
+    color: #FFFFFF; /* Белый текст */
+}
+
+/* Ссылки в выпадающем списке */
+.user-dropdown-menu li a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Наследуем цвет текста */
+    display: block; /* Занимает всю ширину элемента */
+    width: 100%;
 }

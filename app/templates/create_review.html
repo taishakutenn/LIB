@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="book-detail-section-for-add">
+    <form method="POST" class="add-book-form">
+        {{ form.hidden_tag() }}
+
+        <!-- Заголовок отзыва -->
+        <div class="form-group">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-input", placeholder="Введите заголовок отзыва...") }}
+            {% for error in form.title.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Текст отзыва -->
+        <div class="form-group">
+            {{ form.text.label(class="form-label") }}
+            {{ form.text(class="form-input", rows="10", placeholder="Введите текст отзыва...") }}
+            {% for error in form.text.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit" class="book-card-button">{% if change: %}Изменить отзыв {% else %} Отправить отзыв {% endif %}</button>
+    </form>
+</div>
+{% endblock %}

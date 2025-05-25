@@ -1,7 +1,7 @@
 """Файл для Форм"""
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, PasswordField, SubmitField, EmailField, RadioField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, RadioField, BooleanField, TextAreaField
 from wtforms.fields.choices import SelectMultipleField
 from wtforms.fields.form import FormField
 from wtforms.fields.list import FieldList
@@ -51,3 +51,8 @@ class AddBookForm(FlaskForm):
     book_photo = FileField("Обложка книги")
     authors = FieldList(FormField(AuthorForm), min_entries=1) # Минимум 1 поле для автора
     tags = MultiCheckboxField("Теги", choices=[])  # choices зададим в маршруте
+
+
+class CreateReviewForm(FlaskForm):
+    title = StringField("Заголовок отзыва", validators=[DataRequired(), Length(10, 254)])
+    text = TextAreaField("Текст отзыва", validators=[DataRequired(), Length(min=50)])

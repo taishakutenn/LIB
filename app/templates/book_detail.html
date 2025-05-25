@@ -13,6 +13,12 @@
             <div class="book-card-buttons">
                 <a href="#" class="book-card-button">Скачать</a>
                 <a href="#" class="book-card-button">В избранное</a>
+                <a href="{{ url_for('book_reviews_list', book_id=book.id) }}" class="book-card-button">Посмотреть отзывы</a>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == "admin" %}
+                        <a href="{{ url_for('change_book', book_id=book.id) }}" class="book-card-button-change">Изменить</a>
+                    {% endif%}
+                {% endif %}
             </div>
         </div>
     </div>

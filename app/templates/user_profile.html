@@ -14,44 +14,26 @@
         </div>
         <p class="profile-books-container-title">Мои книги</p>
         <div class="profile-books-container">
-            <div class="book-card">
-                <img src="static/images/book1.jpg" class="profile-book-image">
-                <div class="profile-book-info">
-                    <p>Название книги</p>
-                    <p>Автор книги</p>
+            {% for book in user.books %}
+                <div class="book-card">
+                    <img src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" class="profile-book-image">
+                    <div class="profile-book-info">
+                        <p>{{ book.title }}</p>
+                        <p>Авторы книги: {% for author in book.authors %} {{ author.name }} {{ author.surname }} | {% endfor %}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="book-card">
-                <img src="static/images/book1.jpg" class="profile-book-image">
-                <div class="profile-book-info">
-                    <p>Название книги</p>
-                    <p>Автор книги</p>
-                </div>
-            </div>
-            <div class="book-card">
-                <img src="static/images/book1.jpg" class="profile-book-image">
-                <div class="profile-book-info">
-                    <p>Название книги</p>
-                    <p>Автор книги</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="user-profile-reviews">
         <p class="profile-reviews-container-title">Мои отзывы</p>
-        <div class="review-card">
-            <p class="review-title">Самое прекрасное произведение от мира сего</p>
-            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
-        </div>
-        <div class="review-card">
-            <p class="review-title">Самое прекрасное произведение от мира сего</p>
-            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
-        </div>
-        <div class="review-card">
-            <p class="review-title">Самое прекрасное произведение от мира сего</p>
-            <p class="review-text">Книга полностью погружает в свой мир благодаря захватывающему сюжету и глубоко прописанным героям. Каждая страница наполнена эмоциями, а неожиданные повороты событий держат в напряжении до самого конца. Идеально для вечернего чтения!</p>
-        </div>
-        <a href="#" class="see-all-reviews">Смотреть все отзывы</a>
+        {% for review in user.reviews %}
+            <div class="review-card">
+                <p class="review-title">{{ review.title }}</p>
+                <p class="review-text">{{ review.text }}</p>
+            </div>
+        {% endfor %}
+        <a href="{{ url_for('user_reviews', username=user.username) }}" class="see-all-reviews">Смотреть все отзывы</a>
     </div>
 </div>
 {% endblock %}

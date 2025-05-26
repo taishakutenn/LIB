@@ -9,7 +9,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 # Локальные импорты
 from app import app, db, services
-from app.forms import AddBookForm, LoginForm, RegisterForm, CreateReviewForm
+from app.forms import AddBookForm, LoginForm, RegisterForm, CreateReviewForm, CreateAuthorForm
 from app.models import Author, Book, User, Review
 from app.services import (
     add_authors_for_book,
@@ -273,6 +273,36 @@ def user_books(username):
     return render_template("user_books.html", **params)
 
 
+@app.route("/books/delete_book/book_id")
+@login_required
+def delete_book(book_id):
+    """Функция для удаления книги"""
+    if current_user.role != "admin":  # Если пользователь не админ
+        return "У вас нет прав на это", 403
+
+    # Проверяем, существует ли такая книга
+    book = Book.is_exists(book_id)
+    if not book:
+        return "Такой книги не существует", 404
+
+    try:
+        # Удаляем книгу из базы данных
+        db.session.delete(book)
+        db.session.commit()
+
+        # Выводим сообщение об успешном удалении
+        flask.flash("Книга успешно удалена", "success")
+
+    except Exception as e:
+        # Откатываем транзакцию в случае ошибки
+        db.session.rollback()
+        flask.flash(f"Ошибка при удалении книги: {str(e)}", "error")
+        return f"Ошибка при удалении книги: {str(e)}", 500
+
+    # Перенаправляем пользователя на список книг
+    return redirect(url_for("books_list"))
+
+
 # --- Работа с отзывами ---
 @app.route("/books/<int:book_id>/reviews")
 def book_reviews_list(book_id):
@@ -442,6 +472,117 @@ def author_detail(author_id):
               "author": author,
               "local_css_file": "book.css"}
     return render_template("books_author.html", **params)
+
+
+@app.route("/authors/add_author", methods=["GET", "POST"])
+@login_required
+def add_author():
+    """Функция для добавления автора"""
+    if current_user.role != "admin": # Если пользователь не админ
+        return "У вас нет прав на это", 403
+
+    form = CreateAuthorForm() # Создаём форму
+
+    params = {"title": "Добавление автора",
+              "form": form,
+              "local_css_file": "book.css"}
+
+    if form.validate_on_submit():
+        # Создаём автора
+        try:
+            author = Author(name=form.name.data,
+                            surname=form.surname.data,
+                            patronymic=form.patronymic.data if form.patronymic.data else None)
+
+            # Фиксируем изменения
+            db.session.add(author)
+            db.session.commit()
+
+            return redirect(url_for("author_detail", author_id=author.id))
+
+        except Exception as e:
+            # Откатываем транзакцию в случае ошибки
+            print(f"Произошла ошибка: {str(e)}")
+            db.session.rollback()
+            return "Произошла ошибка при добавлении автора", 500
+
+    return render_template("add_author.html", **params)
+
+
+@app.route("/authors/change_author/<int:author_id>")
+@login_required
+def change_author(author_id):
+    """Функция для изменения автора"""
+    if current_user.role != "admin":  # Если пользователь не админ
+        return "У вас нет прав на это", 403
+
+    # Проверяем, существует ли такой автор
+    author = Author.is_exists_id(author_id)
+    if not author:
+        return "Такого автора не существует", 404
+
+    form = CreateAuthorForm(obj=author)  # Создаём форму
+
+    params = {"title": "Добавление автора",
+              "form": form,
+              "change": "yes", # Флаг для html
+              "local_css_file": "book.css"}
+
+    if form.validate_on_submit():
+        is_change = False # флаг для изменения
+
+        if form.name.data != author.name:
+            author.name = form.name.data
+            is_change = True
+
+        if form.surname.data != author.surname:
+            author.surname = form.surname.data
+            is_change = True
+
+        if form.patronymic.data != author.patronymic:
+            author.patronymic = form.patronymic.data
+            is_change = True
+
+        if is_change: # Если были сделаны изменения
+            try:
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                return f"Ошибка при сохранении изменений: {str(e)}", 500
+
+        return redirect(url_for("author_detail", author_id=author.id))
+
+    return render_template("add_author.html", **params)
+
+
+@app.route("/authors/delete_author/<int:author_id>")
+@login_required
+def delete_author(author_id):
+    """Функция для удаления автора"""
+    if current_user.role != "admin":  # Если пользователь не админ
+        return "У вас нет прав на это", 403
+
+    # Проверяем, существует ли такой автор
+    author = Author.is_exists_id(author_id)
+    if not author:
+        return "Такого автора не существует", 404
+
+    try:
+        # Удаляем автора из базы данных
+        db.session.delete(author)
+        db.session.commit()
+
+        # Выводим сообщение об успешном удалении
+        flask.flash("Автор успешно удален", "success")
+
+    except Exception as e:
+        # Откатываем транзакцию в случае ошибки
+        db.session.rollback()
+        flask.flash(f"Ошибка при удалении автора: {str(e)}", "error")
+        return f"Ошибка при удалении автора: {str(e)}", 500
+
+    # Перенаправляем пользователя на список авторов
+    return redirect(url_for("authors_list"))
 
 
 # --- Поиск ---

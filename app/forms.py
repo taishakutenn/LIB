@@ -56,3 +56,9 @@ class AddBookForm(FlaskForm):
 class CreateReviewForm(FlaskForm):
     title = StringField("Заголовок отзыва", validators=[DataRequired(), Length(10, 254)])
     text = TextAreaField("Текст отзыва", validators=[DataRequired(), Length(min=50)])
+
+
+class CreateAuthorForm(FlaskForm):
+    name = StringField("Имя автора", validators=[DataRequired(), Length(3, 50)])
+    surname = StringField("Фамилия автора", validators=[DataRequired(), Length(3, 50)])
+    patronymic = StringField("Отчество автора (если есть)", validators=[Length(0, 73)])

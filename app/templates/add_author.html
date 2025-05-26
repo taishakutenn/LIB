@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="book-detail-section-for-add">
+    <form method="POST" class="add-book-form">
+        {{ form.hidden_tag() }}
+
+        <!-- Имя автора -->
+        <div class="form-group">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-input", placeholder="Введите имя автора...") }}
+            {% for error in form.name.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Фамилия автора -->
+        <div class="form-group">
+            {{ form.surname.label(class="form-label") }}
+            {{ form.surname(class="form-input", placeholder="Введите фамилию автора...") }}
+            {% for error in form.surname.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Отчество автора-->
+        <div class="form-group">
+            {{ form.patronymic.label(class="form-label") }}
+            {{ form.patronymic(class="form-input", placeholder="Введите отчество автора (если есть)...") }}
+            {% for error in form.patronymic.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit" class="book-card-button">Добавить автора</button>
+    </form>
+</div>
+{% endblock %}

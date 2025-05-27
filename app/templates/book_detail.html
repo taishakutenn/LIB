@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
+</div>
 <div class="book-detail-section">
     <div class="book-card full">
         <img src="data:image/jpeg;base64,{{ book.get_photo_base64() }}" alt="Обложка книги" class="book-card-image">
         <div class="book-card-info">
             <h2 class="book-card-title">{{ book.name }}</h2>
-            <p class="book-card-author">Авторы: {% for author in book.authors %} {{ author.name }} {{ author.surname}} {{ author.patronymic }} |{% endfor %}</p>
+            <p class="book-card-author">Авторы: {% for author in book.authors %} <a href="{{ url_for('author_detail', author_id=author.id) }}"> {{ author.name }} {{ author.surname}} {{ author.patronymic }} </a> |{% endfor %}</p>
             <p class="book-detail-meta">Жанры: {% for tag in book.tags %} {{ tag.name }} | {% endfor %}</p>
             <p class="book-card-description">
                 {{ book.description }}
             </p>
             <div class="book-card-buttons">
-                <a href="#" class="book-card-button">Скачать</a>
-                <a href="#" class="book-card-button">В избранное</a>
+                <a href="{{ book.link_to_download }}" class="book-card-button">Скачать</a>
+                <a href="{{ url_for('add_book_for_me', book_id=book.id) }}" class="book-card-button">В избранное</a>
                 <a href="{{ url_for('book_reviews_list', book_id=book.id) }}" class="book-card-button">Посмотреть отзывы</a>
                 {% if current_user.is_authenticated %}
                     {% if current_user.role == "admin" %}
                         <a href="{{ url_for('change_book', book_id=book.id) }}" class="book-card-button-change">Изменить</a>
+                        <a href="{{ url_for('delete_book', book_id=book.id) }}" class="book-card-button-change">Удалить</a>
                     {% endif%}
                 {% endif %}
             </div>

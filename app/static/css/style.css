@@ -95,22 +95,21 @@ html, body {
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    background-color: #1C1C24; /* Основной фон как в хедере */
-    /* border: 1px solid #4447E2; /* Акцентный цвет границы */
-    border-radius: 10px; /* Скругление углов как у инпута */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для объема */
+    background-color: #1C1C24;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    margin-top: 6%; /* Отступ от инпута */
+    margin-top: 6%;
 }
 
 /* Каждая подсказка */
 .suggestion-item {
-    padding: 10px 15px; /* Отступы внутри подсказки */
+    padding: 10px 15px;
     cursor: pointer;
     font-size: 14px;
-    color: #FFFFFF; /* Белый текст */
-    border-bottom: 1px solid #4447E2; /* Разделитель между подсказками */
-    transition: background-color 0.2s ease; /* Плавное изменение фона */
+    color: #FFFFFF;
+    border-bottom: 1px solid #4447E2;
+    transition: background-color 0.2s ease;
 }
 
 /* Убираем последний разделитель */
@@ -250,47 +249,99 @@ html, body {
     text-decoration: none;
 }
 
-/* Контейнер выпадающего списка */
 .user-dropdown-menu {
     position: absolute;
-    top: 100%; /* Размещаем под кнопкой */
-    right: 0; /* Выравниваем по правому краю */
-    background-color: #2D2D3A; /* Темный фон */
-    border-radius: 8px; /* Скругление углов */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Тень для объема */
-    list-style: none; /* Убираем маркеры списка */
-    padding: 10px 0; /* Отступы внутри контейнера */
+    top: 100%;
+    right: 0;
+    background-color: #2D2D3A;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    list-style: none;
+    padding: 10px 0;
     margin: 0;
-    z-index: 1000; /* Чтобы выпадающий список был поверх других элементов */
-    min-width: 150px; /* Минимальная ширина */
-    display: none; /* По умолчанию скрыт */
+    z-index: 1000;
+    min-width: 150px;
+    display: none;
 }
 
-/* Элементы выпадающего списка */
 .user-dropdown-menu li {
-    padding: 10px 15px; /* Отступы внутри элемента */
-    cursor: pointer; /* Изменение курсора при наведении */
-    font-size: 14px; /* Размер текста */
-    color: #CCCCCC; /* Серый текст */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Плавные переходы */
-    border-bottom: 1px solid #4447E2; /* Разделитель между элементами */
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #CCCCCC;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-bottom: 1px solid #4447E2;
 }
 
-/* Убираем последний разделитель */
 .user-dropdown-menu li:last-child {
     border-bottom: none;
 }
 
-/* Эффект при наведении */
 .user-dropdown-menu li:hover {
-    background-color: #4447E2; /* Акцентный цвет фона */
-    color: #FFFFFF; /* Белый текст */
+    background-color: #4447E2;
+    color: #FFFFFF;
 }
 
-/* Ссылки в выпадающем списке */
 .user-dropdown-menu li a {
-    text-decoration: none; /* Убираем подчеркивание */
-    color: inherit; /* Наследуем цвет текста */
-    display: block; /* Занимает всю ширину элемента */
+    text-decoration: none;
+    color: inherit;
+    display: block;
     width: 100%;
+}
+
+/* Общий контейнер для flash-сообщений */
+#flash-messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.flash-message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    color: white;
+    max-width: 400px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.flash-success {
+    background-color: #4CAF50;
+}
+.flash-warning {
+    background-color: #FF9800;
+}
+.flash-error {
+    background-color: #F44336;
+}
+
+.close-flash-message {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.close-flash-message:hover {
+    color: #ddd;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

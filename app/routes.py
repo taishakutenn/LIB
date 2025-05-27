@@ -23,6 +23,7 @@ from app.services import (
     get_last_books,
     get_review_detail,
     get_reviews_for_book,
+    get_max_page,
     get_user_books,
     get_user_reviews,
     search_ajax,
@@ -66,7 +67,7 @@ def login():
             return redirect(url_for("login"))
 
         login_user(user, remember=form.remember_me.data)
-        return redirect(request.args.get("next") or url_for("users", value=current_user.username))
+        return redirect(request.args.get("next") or url_for("user_account", username=current_user.username))
 
     params = {"title": "Авторизация",
               "local_css_file": "authorization.css",
@@ -103,6 +104,8 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        flash("Аккаунт успешно создан", "success")
+
         return redirect(url_for("index"))
 
     params = {"title": "Регистрация",
@@ -129,12 +132,15 @@ def books_list():
     page = request.args.get("page")
     if not page:
         page = 0
-    if page < 0:
+    if int(page) < 0:
         return "Такой страницы не существует", 404
 
     params = {"title": "Лента",
               "books": get_all_books(int(page)),
+              "max_page": get_max_page(), # Получаем максимальную страницу
+              "current_page": int(page), # Для отображения текущей страницы
               "local_css_file": "book.css"}
+
     return render_template("books_ribbon.html", **params)
 
 
@@ -199,7 +205,7 @@ def change_book(book_id):
     available_tags = [tag.name for tag in get_all_tags()]
     form.tags.choices = [(tag, tag) for tag in available_tags]
     selected_tags = [tag.name for tag in book.tags]
-    selected_authors = [" ".join([author.surname, author.name, author.patronymic]) for author in book.authors]
+    selected_authors = [" ".join([author.surname, author.name, author.patronymic if author.patronymic else ""]) for author in book.authors]
 
     params = {
         "title": "Изменить книгу",
@@ -273,7 +279,7 @@ def user_books(username):
     return render_template("user_books.html", **params)
 
 
-@app.route("/books/delete_book/book_id")
+@app.route("/books/delete_book/<int:book_id>")
 @login_required
 def delete_book(book_id):
     """Функция для удаления книги"""
@@ -347,6 +353,7 @@ def user_review_detail(username, review_id):
 
 
 @app.route("/users/<string:username>/reviews/create_review/<int:book_id>", methods=["GET", "POST"])
+@login_required
 def create_review(username, book_id):
     """Создание отзыва"""
     form = CreateReviewForm()
@@ -457,6 +464,7 @@ def delete_review(review_id):
 # --- Работа с авторами ---
 @app.route("/authors")
 def authors_list():
+    """Все авторы"""
     params = {"title": "Авторы",
               "authors": get_all_authors(),
               "local_css_file": "reviews.css"}
@@ -465,6 +473,7 @@ def authors_list():
 
 @app.route("/authors/<int:author_id>")
 def author_detail(author_id):
+    """Книги автора"""
     author = Author.is_exists_id(author_id)
     if not author:
         return "Такого автора не существует", 404
@@ -603,6 +612,8 @@ def search():
         return "Такой страницы не существует", 404
     params = {"title": "Лента",
               "books": get_books_for_search(int(page), search_word),
+              "max_page": get_max_page(),  # Получаем максимальную страницу
+              "current_page": int(page),  # Для отображения текущей страницы
               "local_css_file": "book.css"}
     return render_template("books_ribbon.html", **params)
 
@@ -611,18 +622,16 @@ def search():
 @app.route("/add_book_for_me/<int:book_id>")
 @login_required
 def add_book_for_me(book_id):
-    params = {"title": "Лента",
-              "local_css_file": "book.css"}
     book = Book.is_exists(book_id)
     if not book:
-        return "Такой книги не сущесвутет", 404
+        return "Такой книги не существует", 404
 
     add_book = add_book_for_user(book_id, current_user.id)
     if add_book is False:
-        params["result_message"] = "Произошла ошибка при добавлении книги, попробуйте позже"
+        flash("Произошла ошибка при добавлении книги, попробуйте позже", "error")
     elif add_book is None:
-        params["result_message"] = "Вы уже добавляли эту книгу"
+        flash("Вы уже добавляли эту книгу", "warning")
     else:
-        params["result_message"] = "Книга успешно добавлена в вашу библиотеку"
+        flash("Книга успешно добавлена в вашу библиотеку", "success")
 
-    return render_template("", **params)
+    return redirect(url_for("book_detail", book_id=book.id))

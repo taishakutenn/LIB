@@ -1,3 +1,5 @@
+import math
+
 import sqlalchemy as sa
 from sqlalchemy import cast, desc, func, literal, String
 
@@ -82,6 +84,12 @@ def get_user_books(user_id):
     if not user:
         return []  # Если пользователь не найден, возвращаем пустой список
     return user.books  # Возвращаем список книг пользователя
+
+
+def get_max_page() -> int:
+    """Возвращает максимальную страницу в поиске"""
+    total_books = db.session.query(Book).count() # Получаем общее кол-во книг
+    return math.ceil(total_books / 9) - 1 # На основе того, сколько книг может поместиться на странцие возвращаем максимальную
 
 
 # --- Авторы ---

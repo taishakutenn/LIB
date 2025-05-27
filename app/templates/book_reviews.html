@@ -15,5 +15,6 @@
             <p class="review-title">У данной книги ещё нет отзывов</p>
         {% endif %}
     </div>
+    <a href="{{ url_for('create_review', username=current_user.username, book_id=book.id) }}" class="book-card-button">Оставить отзыв</a>
 </div>
 {% endblock %}

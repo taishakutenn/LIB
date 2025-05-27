@@ -40,7 +40,12 @@ def create_authors():
         {"name": "Фёдор", "surname": "Достоевский", "patronymic": "Михайлович"},
         {"name": "Антон", "surname": "Чехов"},
         {"name": "Иван", "surname": "Бунин"},
-        {"name": "Михаил", "surname": "Булгаков"}
+        {"name": "Михаил", "surname": "Булгаков"},
+        {"name": "Александр", "surname": "Пушкин"},
+        {"name": "Николай", "surname": "Гоголь"},
+        {"name": "Марк", "surname": "Твен"},
+        {"name": "Уильям", "surname": "Шекспир"},
+        {"name": "Эрих Мария", "surname": "Ремарк"}
     ]
     for author_data in authors:
         author = Author(
@@ -53,7 +58,7 @@ def create_authors():
 
 # Функция для создания тегов
 def create_tags():
-    tags = ["классика", "роман", "рассказ", "философия", "драма"]
+    tags = ["классика", "роман", "рассказ", "философия", "драма", "история", "приключения", "комедия", "поэзия"]
     for tag_name in tags:
         tag = Tag(name=tag_name)
         db.session.add(tag)
@@ -67,35 +72,70 @@ def create_books():
             "description": "Эпопея о войне и мире в России XIX века.",
             "authors": [{"name": "Лев Николаевич Толстой"}],
             "tags": ["классика", "роман"],
-            "photo_path": "app/static/images/books_for_test_data/war_and_peace.jpg"
+            "photo_path": "static/images/books_for_test_data/war_and_peace.jpg"
         },
         {
             "title": "Преступление и наказание",
             "description": "Роман о моральных и психологических переживаниях человека.",
             "authors": [{"name": "Фёдор Михайлович Достоевский"}],
             "tags": ["классика", "роман", "философия"],
-            "photo_path": "app/static/images/books_for_test_data/crime_and_punishment.jpg"
+            "photo_path": "static/images/books_for_test_data/crime_and_punishment.jpg"
         },
         {
             "title": "Мастер и Маргарита",
             "description": "Фантастический роман о любви и вере.",
             "authors": [{"name": "Михаил Афанасьевич Булгаков"}],
             "tags": ["классика", "роман", "философия"],
-            "photo_path": "app/static/images/books_for_test_data/master_and_margarita.jpg"
+            "photo_path": "static/images/books_for_test_data/master_and_margarita.jpg"
         },
         {
             "title": "Человек в футляре",
             "description": "Рассказ о человеческой замкнутости и страхе перемен.",
             "authors": [{"name": "Антон Павлович Чехов"}],
             "tags": ["классика", "рассказ"],
-            "photo_path": "app/static/images/books_for_test_data/man_in_a_case.jpg"
+            "photo_path": "static/images/books_for_test_data/man_in_a_case.jpg"
         },
         {
             "title": "Тёмные аллеи",
             "description": "Сборник рассказов о любви и судьбе.",
             "authors": [{"name": "Иван Александрович Бунин"}],
             "tags": ["классика", "рассказ"],
-            "photo_path": "app/static/images/books_for_test_data/dark_alleys.jpg"
+            "photo_path": "static/images/books_for_test_data/dark_alleys.jpg"
+        },
+        {
+            "title": "Евгений Онегин",
+            "description": "Роман в стихах о жизни русского дворянства.",
+            "authors": [{"name": "Александр Сергеевич Пушкин"}],
+            "tags": ["классика", "поэзия", "роман"],
+            "photo_path": "static/images/books_for_test_data/eugene_onegin.jpg"
+        },
+        {
+            "title": "Мёртвые души",
+            "description": "Сатирический роман о жизни помещиков.",
+            "authors": [{"name": "Николай Васильевич Гоголь"}],
+            "tags": ["классика", "роман", "сатира"],
+            "photo_path": "static/images/books_for_test_data/dead_souls.jpg"
+        },
+        {
+            "title": "Три товарища",
+            "description": "Роман о дружбе и любви в Германии времен Первой мировой войны.",
+            "authors": [{"name": "Эрих Мария Ремарк"}],
+            "tags": ["классика", "роман", "философия"],
+            "photo_path": "static/images/books_for_test_data/three_comrades.jpg"
+        },
+        {
+            "title": "Приключения Тома Сойера",
+            "description": "Приключенческий роман о детстве в Америке.",
+            "authors": [{"name": "Марк Твен"}],
+            "tags": ["приключения", "комедия"],
+            "photo_path": "static/images/books_for_test_data/tom_sawyer.jpg"
+        },
+        {
+            "title": "Гамлет",
+            "description": "Трагедия о мести и человеческих страстях.",
+            "authors": [{"name": "Уильям Шекспир"}],
+            "tags": ["классика", "драма"],
+            "photo_path": "static/images/books_for_test_data/hamlet.jpg"
         }
     ]
     for book_data in books:
@@ -117,16 +157,38 @@ def create_books():
 
 # Функция для добавления авторов для книги
 def add_authors_for_book(book_id, authors):
+    """
+    Добавляет связи между книгой и авторами в ассоциативную таблицу authors_books.
+    Если автора нет в базе данных, он создаётся.
+    """
     for author_dict in authors:
         author_row = author_dict["name"].split()
-        author_surname = author_row[0]
-        author_name = author_row[1]
-        author_patronymic = author_row[2] if len(author_row) > 2 else None
+        author_name = author_row[0]
+        author_patronymic = author_row[1] if len(author_row) > 2 else None
+        author_surname = author_row[2] if len(author_row) > 2 else author_row[1]
+
+        # Проверяем, существует ли автор
         author = Author.is_exists(author_name, author_surname, author_patronymic)
         if not author:
-            continue
-        stmt = authors_books.insert().values(book_id=book_id, author_id=author.id)
-        db.session.execute(stmt)
+            # Если автора нет, создаём его
+            author = Author(
+                name=author_name,
+                surname=author_surname,
+                patronymic=author_patronymic
+            )
+            db.session.add(author)
+            db.session.commit()
+
+        # Проверяем, существует ли связь между книгой и автором
+        stmt = sa.select(authors_books).where(
+            authors_books.c.book_id == book_id,
+            authors_books.c.author_id == author.id
+        )
+        exists = db.session.execute(stmt).first()
+        if not exists:
+            # Если связи нет, добавляем её
+            insert_stmt = authors_books.insert().values(book_id=book_id, author_id=author.id)
+            db.session.execute(insert_stmt)
     db.session.commit()
 
 # Функция для добавления тегов для книги

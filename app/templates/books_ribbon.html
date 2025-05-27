@@ -11,8 +11,8 @@
                             {{ book.description }}
                         </p>
                         <div class="book-card-buttons">
-                            <a href="#" class="book-card-button">Скачать</a>
-                            <a href="#" class="book-card-button">В избранное</a>
+                            <a href="{{ book.link_to_download }}" class="book-card-button">Скачать</a>
+                            <a href="{{ url_for('add_book_for_me', book_id=book.id) }}" class="book-card-button">В избранное</a>
                             {% if current_user.is_authenticated %}
                                 {% if current_user.role == "admin" %}
                                     <a href="{{ url_for('change_book', book_id=book.id) }}" class="book-card-button-change">Изменить</a>
@@ -23,4 +23,11 @@
                 {% endfor %}
         </div>
     </div>
+<div class="pagination-container">
+    <a href="{{ url_for('books_list', page=0) }}" class="pagination-link">0</a>
+    <a href="{{ url_for('books_list', page=current_page - 1) }}" class="pagination-link pagination-arrow">←</a>
+    <span class="pagination-current">{{ current_page }}</span>
+    <a href="{{ url_for('books_list', page=current_page + 1) }}" class="pagination-link pagination-arrow">→</a>
+    <a href="{{ url_for('books_list', page=max_page) }}" class="pagination-link">{{ max_page }}</a>
+</div>
 {% endblock %}

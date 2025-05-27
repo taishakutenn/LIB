@@ -62,6 +62,10 @@
     margin: 0 0 12px;
 }
 
+.book-card-author a{
+    color: inherit;
+}
+
 .book-card-description {
     font-size: 14px;
     color: #CCCCCC;
@@ -297,4 +301,56 @@
     background-color: #0f172a; /* ещё темнее, когда выбрано */
     color: #e0e7ff;
     font-weight: bold;
+}
+
+/* Общий контейнер пагинации */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Центрируем пагинацию */
+    align-items: center;
+    gap: 10px; /* Расстояние между элементами */
+    margin-top: 20px; /* Отступ сверху */
+    padding: 15px 0; /* Внутренний отступ */
+    background-color: #1C1C24; /* Цвет фона */
+    border-radius: 16px; /* Скругление углов */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Тень */
+    bottom: 0; /* Прижимаем к низу */
+}
+
+/* Кнопки пагинации */
+.pagination-link {
+    background-color: #4447E2;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.pagination-link:hover {
+    background-color: #5B5EFF;
+}
+
+/* Стрелки пагинации */
+.pagination-arrow {
+    font-size: 16px; /* Увеличиваем размер стрелок */
+    padding: 8px 12px; /* Меньше внутренний отступ */
+}
+
+/* Текущая страница */
+.pagination-current {
+    font-size: 16px;
+    font-weight: bold;
+    color: #CCCCCC; /* Цвет текста */
+    padding: 8px 14px; /* Одинаковый отступ для выравнивания */
+    cursor: default; /* Убираем указатель мыши */
+}
+
+/* Отключение ссылок на недоступные страницы */
+.pagination-link.disabled {
+    background-color: #333333; /* Цвет неактивных ссылок */
+    cursor: not-allowed; /* Изменяем курсор */
+    pointer-events: none; /* Блокируем клики */
 }

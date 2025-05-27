@@ -10,8 +10,8 @@
                             {{ book.description }}
                         </p>
                         <div class="book-card-buttons">
-                            <a href="#" class="book-card-button">Скачать</a>
-                            <a href="#" class="book-card-button">В избранное</a>
+                            <a href="{{ book.link_to_download }}" class="book-card-button">Скачать</a>
+                            <a href="{{ url_for('add_book_for_me', book_id=book.id) }}" class="book-card-button">В избранное</a>
                             {% if current_user.is_authenticated %}
                                 {% if current_user.role == "admin" %}
                                     <a href="{{ url_for('change_book', book_id=book.id) }}" class="book-card-button-change">Изменить</a>
@@ -21,5 +21,7 @@
                     </div>
                 {% endfor %}
         </div>
+        <a href="{{ url_for('change_author', author_id=author.id) }}" class="book-card-button">Изменить автора</a>
+        <a href="{{ url_for('delete_author', author_id=author.id) }}" class="book-card-button-change">Удалить автора</a>
     </div>
 {% endblock %}

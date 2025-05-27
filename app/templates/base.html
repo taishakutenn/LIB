@@ -25,6 +25,19 @@
             <span id="notification-text">Здесь будет текст уведомления</span>
         </div>
     {% endif %}
+    <!-- Блок для flash-сообщений -->
+    <div id="flash-messages-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="close-flash-message">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <div class="wrapper">
         <!-- Хеадер -->
         <header class="header">
@@ -56,8 +69,9 @@
                         <!-- Выпадающий список -->
                         <ul class="user-dropdown-menu" style="display: none;">
                             <li><a href="{{ url_for('user_account', username=current_user.username) }}">Мой профиль</a></li>
-                            <li><a href="">Мои книги</a></li>
+                            <li><a href="{{ url_for('user_books', username=current_user.username) }}">Мои книги</a></li>
                             <li><a href="{{ url_for('user_reviews', username=current_user.username) }}">Мои отзывы</a></li>
+                            <li><a href="{{ url_for('logout') }}">Выйти из аккаунта</a></li>
                         </ul>
                     {% else %}
                         <p class="header-user-nickname">
@@ -103,6 +117,9 @@
 
 <!--    Подключаем срипт для выпадающей стрелки-->
     <script src="{{ url_for('static', filename='scripts/arrow_down.js') }}"></script>
+
+<!--    Подключаем срипт для flash соо-->
+    <script src="{{ url_for('static', filename='scripts/flash.js') }}"></script>
 
 <!--    &lt;!&ndash;Подключаем скрипт уведомления об ошибке&ndash;&gt;-->
 <!--    <script src="{{ url_for('static', filename='scripts/error_notification.js') }}"></script>-->
